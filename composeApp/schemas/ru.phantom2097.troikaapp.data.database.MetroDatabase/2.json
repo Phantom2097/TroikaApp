@@ -1,0 +1,229 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "061bb3285efc1a717dde0dc141708863",
+    "entities": [
+      {
+        "tableName": "trip",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trip_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `price` REAL NOT NULL, `metroStation` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "tripId",
+            "columnName": "trip_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "metroStation",
+            "columnName": "metroStation",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "trip_id"
+          ]
+        }
+      },
+      {
+        "tableName": "PriceEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`price_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `oneTrip` REAL NOT NULL, `timeTicket` REAL NOT NULL, `zone1` REAL NOT NULL, `zone2` REAL NOT NULL, `days30` REAL NOT NULL, `days90` REAL NOT NULL, `days365` REAL NOT NULL, `biometry` REAL NOT NULL, `bankCard` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "priceId",
+            "columnName": "price_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oneTrip",
+            "columnName": "oneTrip",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeTicket",
+            "columnName": "timeTicket",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "zone1",
+            "columnName": "zone1",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "zone2",
+            "columnName": "zone2",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "days30",
+            "columnName": "days30",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "days90",
+            "columnName": "days90",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "days365",
+            "columnName": "days365",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "biometry",
+            "columnName": "biometry",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bankCard",
+            "columnName": "bankCard",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "price_id"
+          ]
+        }
+      },
+      {
+        "tableName": "MetroStationEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`metro_station_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stationName` TEXT NOT NULL, `lineName` TEXT NOT NULL, `lineColor` TEXT NOT NULL, `cityName` TEXT NOT NULL, `lineId` INTEGER NOT NULL, `lat` INTEGER NOT NULL, `lon` INTEGER NOT NULL, `isClosed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "metroStationId",
+            "columnName": "metro_station_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stationName",
+            "columnName": "stationName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lineName",
+            "columnName": "lineName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lineColor",
+            "columnName": "lineColor",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cityName",
+            "columnName": "cityName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lineId",
+            "columnName": "lineId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "lat",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lon",
+            "columnName": "lon",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isClosed",
+            "columnName": "isClosed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "metro_station_id"
+          ]
+        }
+      },
+      {
+        "tableName": "trip_price",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`trip_price_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `price` REAL NOT NULL, `duration` INTEGER NOT NULL, `dateCreation` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "tripPriceId",
+            "columnName": "trip_price_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateCreation",
+            "columnName": "dateCreation",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "trip_price_id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '061bb3285efc1a717dde0dc141708863')"
+    ]
+  }
+}
