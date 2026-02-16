@@ -25,7 +25,7 @@ fun CrossfadeNavigationBarIcon(
     Crossfade(
         targetState = isSelectedKey,
         label = "IconCrossfade",
-        animationSpec = tween(animationDuration, easing = EaseInOutCirc)
+        animationSpec = tween(600, easing = EaseInOutCirc)
     ) { isSelected ->
 
         val icon = if (isSelected) {
@@ -46,8 +46,6 @@ fun CrossfadeNavigationBarIcon(
         )
     }
 }
-
-private const val animationDuration = 600
 
 @Preview
 @Composable

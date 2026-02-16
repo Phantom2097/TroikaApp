@@ -110,7 +110,9 @@ fun App() {
                             HistoryScreen()
                         }
                         entry<SettingsRoute> {
-                            SettingsScreen()
+                            SettingsScreen(
+                                innerPadding = innerPadding
+                            )
                         }
                         entry<SubscriptionRoute> {
                             SubscriptionScreen()
