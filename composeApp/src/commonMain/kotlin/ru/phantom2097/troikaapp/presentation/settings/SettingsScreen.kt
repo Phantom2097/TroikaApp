@@ -30,7 +30,7 @@ fun SettingsScreen(
     val paddingValues = PaddingValues(
         end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
         start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
-        bottom = innerPadding.calculateStartPadding(LayoutDirection.Ltr)
+        bottom = innerPadding.calculateBottomPadding()
     )
     val topPadding = innerPadding.calculateTopPadding()
 
