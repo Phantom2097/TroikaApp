@@ -1,5 +1,7 @@
 package ru.phantom2097.troikaapp.presentation.settings
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -21,13 +22,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.vectorResource
+import ru.phantom2097.troikaapp.presentation.core.ui.CrossfadeIcon
 import ru.phantom2097.troikaapp.presentation.ui.theme.AppTheme
 import ru.phantom2097.troikaapp.resources.Res
-import ru.phantom2097.troikaapp.resources.home_smile_bold
+import ru.phantom2097.troikaapp.resources.alt_arrow_down_bold
+import ru.phantom2097.troikaapp.resources.alt_arrow_down_outline
 
 @Composable
 fun SettingsIconWithMultipleChoose(
@@ -38,6 +41,12 @@ fun SettingsIconWithMultipleChoose(
     var isExpanded by remember {
         mutableStateOf(false)
     }
+    val angle by animateFloatAsState(
+        targetValue = if (isExpanded) 180f else 0f,
+        animationSpec = tween(durationMillis = 600), // Длительность анимации
+        label = "rotation"
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -69,16 +78,23 @@ fun SettingsIconWithMultipleChoose(
             IconButton(
                 onClick = { isExpanded = !isExpanded }
             ) {
-                Icon(
-                    imageVector = vectorResource(Res.drawable.home_smile_bold),
-                    contentDescription = null
+                CrossfadeIcon(
+                    modifier = Modifier
+                        .graphicsLayer {
+                            rotationX = angle
+                        },
+                    isSelectedIcon = isExpanded,
+                    iconBold = Res.drawable.alt_arrow_down_bold,
+                    iconOutline = Res.drawable.alt_arrow_down_outline,
+                    description = null,
+                    size = 36.dp
                 )
             }
             DropdownMenu(
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false },
             ) {
-                repeat(4) {
+                repeat(10) {
                     DropdownMenuItem(
                         text = { Text("text $it") },
                         onClick = { }

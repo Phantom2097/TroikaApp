@@ -8,22 +8,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.vectorResource
 import ru.phantom2097.troikaapp.presentation.ui.theme.AppTheme
 import ru.phantom2097.troikaapp.resources.Res
 import ru.phantom2097.troikaapp.resources.outline_edit_calendar_24
-import ru.phantom2097.troikaapp.resources.settings_outline
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarItem(
-    settingsClickListener: () -> Unit
+    settingsClickListener: () -> Unit,
 ) {
     TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+        ),
         title = {
             Text(
                 text = "Top Item",
@@ -31,32 +35,26 @@ fun TopAppBarItem(
             )
         },
         actions = {
-            IconButton(
-                onClick = {
-                    settingsClickListener()
-                }
-            ) {
-                Icon(
-                    modifier = Modifier.size(32.dp),
-                    imageVector = vectorResource(Res.drawable.outline_edit_calendar_24),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-            IconButton(
-                onClick = {
-                    settingsClickListener()
-                }
-            ) {
-                Icon(
-                    modifier = Modifier.size(32.dp),
-                    imageVector = vectorResource(Res.drawable.settings_outline),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
+            TopAppBarItemActions(settingsClickListener)
         }
     )
+}
+
+@Composable
+private fun TopAppBarItemActions(settingsClickListener: () -> Unit) {
+    IconButton(
+        onClick = {
+            settingsClickListener()
+        }
+
+    ) {
+        Icon(
+            modifier = Modifier.size(32.dp),
+            imageVector = vectorResource(Res.drawable.outline_edit_calendar_24),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
+    }
 }
 
 @Composable
@@ -64,9 +62,9 @@ fun TopAppBarItem(
 private fun TopAppBarItemPreview() {
     AppTheme {
         Scaffold(
-            topBar =  {
-                TopAppBarItem {  }
+            topBar = {
+                TopAppBarItem { }
             }
-        ) {  }
+        ) { }
     }
 }

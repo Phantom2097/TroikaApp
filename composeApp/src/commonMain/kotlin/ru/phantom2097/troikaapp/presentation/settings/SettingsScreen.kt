@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 
@@ -24,10 +27,32 @@ fun SettingsScreen(
     settingsList: List<Pair<String, List<String>>> = settings,
     innerPadding: PaddingValues = PaddingValues(),
 ) {
+    val paddingValues = PaddingValues(
+        end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
+        start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
+        bottom = innerPadding.calculateStartPadding(LayoutDirection.Ltr)
+    )
+    val topPadding = innerPadding.calculateTopPadding()
+
     LazyColumn(
-        modifier = modifier,
-        contentPadding = innerPadding
+        modifier = modifier
+            .padding(top = topPadding),
+        contentPadding = paddingValues
     ) {
+        item {
+            SettingsIconWithSwitch(
+                "Toggle",
+                false,
+                { }
+            )
+        }
+        item {
+            SettingsIconWithMultipleChoose(
+                "MultipleChoose",
+                initialValue = false,
+                { }
+            )
+        }
         settingsList.fastForEach { (title, item) ->
             stickyHeader {
                 Row(
