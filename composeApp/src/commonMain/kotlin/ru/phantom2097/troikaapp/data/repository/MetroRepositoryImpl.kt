@@ -3,23 +3,28 @@ package ru.phantom2097.troikaapp.data.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.phantom2097.troikaapp.data.database.MetroDatabase
+import ru.phantom2097.troikaapp.data.mappers.TripMapper
 import ru.phantom2097.troikaapp.domain.entites.TripInfo
 import ru.phantom2097.troikaapp.domain.repository.MetroRepository
 
 class MetroRepositoryImpl(
     database: MetroDatabase,
+    tripMapper: TripMapper,
 ) : MetroRepository {
 
     private val metroStationDao = database.tripPriceDao()
     private val tripDao = database.tripDao()
 
     override fun getTripHistory(): Flow<List<TripInfo>> {
-        TODO("Not yet implemented")
+        TODO()
+//        return tripDao.getAllTrip().map {
+//
+//        }
     }
 
     override suspend fun getAmountSpentSum(): Flow<Double> {
         val amountSum = tripDao.getAmountSpentMoneyForTrip()
-        return flow{
+        return flow {
             emit(amountSum ?: 0.0)
         }
     }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
@@ -27,14 +28,16 @@ class SummaryViewModel(
     private val eventBus: AppBottomBarEventBus,
 ) : ViewModel() {
 
-//    val amountSum: StateFlow<Double>
-//        field = MutableStateFlow<Double>(0.0)
-
-    private val _amountSum = MutableStateFlow<Double>(0.0)
-    val amountSum get() = _amountSum.asStateFlow()
-
-//    val uiState: StateFlow<SummaryUiState>
-//        field = MutableStateFlow<SummaryUiState>(SummaryUiState.Loading)
+    private val _amountSum = MutableStateFlow<Double>(AMOUNT_SUM_INITIAL_VALUE)
+    val amountSum
+        get() = _amountSum
+            .asStateFlow()
+            .onStart { /*getAmountSum()*/ }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_LIMIT),
+                initialValue = AMOUNT_SUM_INITIAL_VALUE
+            )
 
     private val _uiState = MutableStateFlow<SummaryUiState>(SummaryUiState.Loading)
     val uiState get() = _uiState.asStateFlow()
@@ -47,11 +50,8 @@ class SummaryViewModel(
         .onStart { startCollectEvent() }
         .shareIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed()
+            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_LIMIT)
         )
-
-//    val selectedDates: StateFlow<Pair<Long, Long>>
-//        field = MutableStateFlow<Pair<Long, Long>>(0L to 0L)
 
     private val _selectedDates = MutableStateFlow<Pair<Long, Long>>(0L to 0L)
     val selectedDates = _selectedDates.asStateFlow()
@@ -62,6 +62,14 @@ class SummaryViewModel(
                 if (event is NavEvent.SummaryReselected) {
                     _scrollToTop.emit(Unit)
                 }
+            }
+        }
+    }
+
+    private fun getAmountSum() {
+        viewModelScope.launch {
+            getTripHistoryUseCase.invoke().collect { list ->
+                _amountSum.update { list.sumOf { it.price } }
             }
         }
     }
@@ -100,4 +108,10 @@ class SummaryViewModel(
 
 //    private val _amountSum = MutableStateFlow<Double>(0.0)
 //    val amountSum get() = _amountSum.asStateFlow()
+
+    companion object {
+        private const val STOP_TIMEOUT_LIMIT = 5000L
+
+        private const val AMOUNT_SUM_INITIAL_VALUE = 0.0
+    }
 }

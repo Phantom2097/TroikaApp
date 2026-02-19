@@ -23,15 +23,15 @@ import ru.phantom2097.troikaapp.presentation.core.bottom_bar.AppTabs
 fun CrossfadeIcon(
     modifier: Modifier = Modifier,
     isSelectedIcon: Boolean,
-    iconBold: DrawableResource,
-    iconOutline: DrawableResource,
+    iconSelected: DrawableResource,
+    iconUnselected: DrawableResource,
     description: String?,
     colors: CrossfadeIconColors = CrossfadeIconDefaults.colors(),
     size: Dp = CrossfadeIconDefaults.iconSize
 ) {
 
-    val iconBold = vectorResource(iconBold)
-    val iconOutline = vectorResource(iconOutline)
+    val iconBold = vectorResource(iconSelected)
+    val iconOutline = vectorResource(iconUnselected)
 
     Crossfade(
         targetState = isSelectedIcon,
@@ -65,18 +65,18 @@ object CrossfadeIconDefaults {
         unSelectedIconColor: Color = Color.Unspecified,
     ): CrossfadeIconColors = CrossfadeIconColors(
         selectedIconColor = selectedIconColor,
-        unSelectedIconColor = unSelectedIconColor
+        unselectedIconColor = unSelectedIconColor
     )
 }
 
 @Immutable
 class CrossfadeIconColors(
     val selectedIconColor: Color,
-    val unSelectedIconColor: Color,
+    val unselectedIconColor: Color,
 ) {
     @Composable
     fun iconColor(selected: Boolean): State<Color> {
-        return rememberUpdatedState(if (selected) selectedIconColor else unSelectedIconColor)
+        return rememberUpdatedState(if (selected) selectedIconColor else unselectedIconColor)
     }
 }
 
@@ -87,8 +87,8 @@ private fun CrossfadeIconPreview(
     val item = AppTabs.entries[0]
     CrossfadeIcon(
         isSelectedIcon = true,
-        iconBold = item.iconBold,
-        iconOutline = item.iconOutline,
+        iconSelected = item.iconBold,
+        iconUnselected = item.iconOutline,
         description = item.description,
     )
 }

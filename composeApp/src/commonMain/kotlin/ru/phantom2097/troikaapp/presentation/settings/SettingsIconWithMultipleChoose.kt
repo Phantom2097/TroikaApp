@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.phantom2097.troikaapp.presentation.core.ui.CrossfadeIcon
+import ru.phantom2097.troikaapp.presentation.core.ui.CrossfadeIconDefaults
 import ru.phantom2097.troikaapp.presentation.ui.theme.AppTheme
 import ru.phantom2097.troikaapp.resources.Res
 import ru.phantom2097.troikaapp.resources.alt_arrow_down_bold
@@ -84,9 +86,13 @@ fun SettingsIconWithMultipleChoose(
                             rotationX = angle
                         },
                     isSelectedIcon = isExpanded,
-                    iconBold = Res.drawable.alt_arrow_down_bold,
-                    iconOutline = Res.drawable.alt_arrow_down_outline,
+                    iconSelected = Res.drawable.alt_arrow_down_bold,
+                    iconUnselected = Res.drawable.alt_arrow_down_outline,
                     description = null,
+                    colors = CrossfadeIconDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        unSelectedIconColor = MaterialTheme.colorScheme.primary
+                    ),
                     size = 36.dp
                 )
             }

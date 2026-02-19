@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import ru.phantom2097.troikaapp.presentation.core.ui.CrossfadeIcon
+import ru.phantom2097.troikaapp.presentation.core.ui.CrossfadeIconDefaults
 
 // TODO: rename function
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -60,9 +61,13 @@ fun BottomAppBarItem(
                     }, icon = {
                         CrossfadeIcon(
                             isSelectedIcon = isSelectedKey,
-                            iconBold = item.iconBold,
-                            iconOutline = item.iconOutline,
+                            iconSelected = item.iconBold,
+                            iconUnselected = item.iconOutline,
                             description = item.description,
+                            colors = CrossfadeIconDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                unSelectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
                         )
                     }, label = {
                         Text(
