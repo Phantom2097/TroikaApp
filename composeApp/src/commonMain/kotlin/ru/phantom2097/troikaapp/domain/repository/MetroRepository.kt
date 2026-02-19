@@ -1,13 +1,16 @@
 package ru.phantom2097.troikaapp.domain.repository
 
+import kotlinx.coroutines.flow.Flow
+import ru.phantom2097.troikaapp.domain.entites.TripInfo
+
 interface MetroRepository {
 
-    suspend fun getTripHistory()
-    suspend fun getAmountSpentSum(): Result<Double>
+    fun getTripHistory(): Flow<List<TripInfo>>
+    suspend fun getAmountSpentSum(): Flow<Double>
 
     suspend fun removeTripHistory()
 
-    suspend fun getSubscriptionInfo()
+    suspend fun getSubscriptionInfo() // add Flow
 
     suspend fun addTripInformation()
 
