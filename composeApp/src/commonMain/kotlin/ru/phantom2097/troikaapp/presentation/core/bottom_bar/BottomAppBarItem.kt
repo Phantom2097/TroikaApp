@@ -33,10 +33,12 @@ fun BottomAppBarItem(
     val backgroundBrush = remember(backgroundColor) {
         Brush.verticalGradient(
             colorStops = arrayOf(
-                0.0f to Color.Transparent, 0.5f to backgroundColor
+                0.0f to Color.Transparent, 0.3f to backgroundColor
             )
         )
     }
+
+    val tabs = remember { AppTabs.entries }
 
     ShortNavigationBar(
         modifier = Modifier.background(
@@ -44,21 +46,24 @@ fun BottomAppBarItem(
         ), containerColor = Color.Transparent
     ) {
         Row(
-            modifier = Modifier.padding(4.dp).background(
-                color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                shape = MaterialTheme.shapes.extraExtraLarge
-            ),
+            modifier = Modifier
+                .padding(4.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceContainer,
+                    shape = MaterialTheme.shapes.extraExtraLarge
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            AppTabs.entries.forEach { item ->
-                val itemRoute = item.route
-                val isSelectedKey = selectedKey == itemRoute
+            tabs.forEach { item ->
+                val isSelectedKey = selectedKey == item.route
+
                 ShortNavigationBarItem(
-                    selected = selectedKey == itemRoute,
+                    selected = isSelectedKey,
                     onClick = {
-                        onClick(itemRoute)
-                    }, icon = {
+                        onClick(item.route)
+                    },
+                    icon = {
                         CrossfadeIcon(
                             isSelectedIcon = isSelectedKey,
                             iconSelected = item.iconBold,
@@ -66,17 +71,19 @@ fun BottomAppBarItem(
                             description = item.description,
                             colors = CrossfadeIconDefaults.colors(
                                 selectedIconColor = MaterialTheme.colorScheme.primary,
-                                unSelectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                unSelectedIconColor = MaterialTheme.colorScheme.onSurface
                             )
                         )
-                    }, label = {
+                    },
+                    label = {
                         Text(
                             text = item.label,
-                            color = if (isSelectedKey) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondaryContainer,
+                            color = if (isSelectedKey) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                             fontSize = 14.sp
                         )
                     }
                 )
+
             }
         }
     }

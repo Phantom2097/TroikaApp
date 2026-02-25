@@ -16,13 +16,14 @@ import kotlin.time.Clock
 
 internal class TestRepository : MetroRepository {
 
-    private val tripListState = MutableStateFlow<List<TripInfo>>(emptyList())
+    private val _tripListState = MutableStateFlow<List<TripInfo>>(emptyList())
+    private val _amountSum = MutableStateFlow<Double>(0.0)
 
     private val metroStation = MetroStationImpl(
         stationName = "TestStation",
         lineNum = 0,
         lineColor = 100,
-        lineName = 0,
+        lineName = "Линия 0",
         isOpen = Random.nextBoolean()
     )
 
@@ -31,11 +32,11 @@ internal class TestRepository : MetroRepository {
     }
 
     override fun getTripHistory(): Flow<List<TripInfo>> {
-        return tripListState.asStateFlow()
+        return _tripListState.asStateFlow()
     }
 
-    override suspend fun getAmountSpentSum(): Flow<Double> {
-        TODO("Not yet implemented")
+    override fun getAmountSpentSum(): Flow<Double> {
+        return _amountSum.asStateFlow()
     }
 
     override suspend fun removeTripHistory() {
@@ -64,7 +65,8 @@ internal class TestRepository : MetroRepository {
         repeat(10) {
 
             val randomOffset = Random.nextLong(0, 10)
-            val tripTime = currentTime.minus(randomOffset, DateTimeUnit.DAY, TimeZone.currentSystemDefault())
+            val tripTime =
+                currentTime.minus(randomOffset, DateTimeUnit.DAY, TimeZone.currentSystemDefault())
 
             list.add(
                 TripInfoImpl(
@@ -74,8 +76,12 @@ internal class TestRepository : MetroRepository {
                 )
             )
         }
-        tripListState.update {
+        _tripListState.update {
             list
         }
+    }
+
+    fun emitAmountSum(value: Double) {
+        _amountSum.value = value
     }
 }

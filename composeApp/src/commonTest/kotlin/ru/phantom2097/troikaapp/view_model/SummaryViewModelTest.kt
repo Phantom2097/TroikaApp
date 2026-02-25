@@ -2,7 +2,10 @@ package ru.phantom2097.troikaapp.view_model
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -19,7 +22,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SummaryViewModelTest {
+internal class SummaryViewModelTest {
     private lateinit var repository: MetroRepository
     private lateinit var viewModel: SummaryViewModel
 
@@ -57,5 +60,23 @@ class SummaryViewModelTest {
 
         val state = viewModel.uiState.value
         assertTrue(state is SummaryUiState.SummaryData, "State should be SummaryData $state")
+    }
+
+    @Test
+    fun `amountSum is changed correctly`() = runTest {
+        val results = mutableListOf<Double>()
+
+        val job = launch(UnconfinedTestDispatcher()) {
+            viewModel.amountSum.collect { results.add(it) }
+        }
+
+        (repository as TestRepository).emitAmountSum(10.0)
+        delay(50)
+        (repository as TestRepository).emitAmountSum(340.0)
+        delay(50)
+
+        assertEquals(listOf(0.0, 10.0, 340.0), results)
+
+        job.cancel()
     }
 }

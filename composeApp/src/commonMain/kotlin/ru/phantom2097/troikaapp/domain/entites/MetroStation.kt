@@ -4,6 +4,6 @@ interface MetroStation {
     val stationName: String
     val lineNum: Int
     val lineColor: Int
-    val lineName: Int
+    val lineName: String
     val isOpen: Boolean
 }

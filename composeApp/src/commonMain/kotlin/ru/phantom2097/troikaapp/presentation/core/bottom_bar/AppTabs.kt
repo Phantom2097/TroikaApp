@@ -8,8 +8,8 @@ import ru.phantom2097.troikaapp.resources.clipboard_bold
 import ru.phantom2097.troikaapp.resources.clipboard_outline
 import ru.phantom2097.troikaapp.resources.home_smile_bold
 import ru.phantom2097.troikaapp.resources.home_smile_outline
-import ru.phantom2097.troikaapp.resources.record_circle_bold
-import ru.phantom2097.troikaapp.resources.record_circle_outline
+import ru.phantom2097.troikaapp.resources.library_bold
+import ru.phantom2097.troikaapp.resources.library_outline
 import ru.phantom2097.troikaapp.resources.settings_bold
 import ru.phantom2097.troikaapp.resources.settings_outline
 
@@ -29,8 +29,8 @@ enum class AppTabs(
     ),
     History(
         "История",
-        Res.drawable.record_circle_bold,
-        Res.drawable.record_circle_outline,
+        Res.drawable.library_bold,
+        Res.drawable.library_outline,
         description = null,
         route = AppRoutes.HistoryRoute
     ),

@@ -12,7 +12,7 @@ data class MetroStationEntity(
     val metroStationId: Int = 0,
     val stationName: String,
     val lineName: String,
-    val lineColor: String,
+    val lineColor: Int,
     val cityName: String,
     val lineId: Int,
     val lat: Int,

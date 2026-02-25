@@ -62,6 +62,11 @@ kotlin {
             implementation(libs.material3.adaptive)
             implementation(libs.material3.adaptive.navigation.suite)
 
+            // DataStore library
+            api(libs.androidx.datastore)
+            // The Preferences DataStore library
+            api(libs.androidx.datastore.preferences)
+
             // DateTime
             implementation(libs.kotlinx.datetime)
 

@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import ru.phantom2097.troikaapp.navigation.AppRoutes
@@ -17,6 +19,7 @@ import ru.phantom2097.troikaapp.navigation.AppRoutes.SelectTargetPeriodRoute
 import ru.phantom2097.troikaapp.navigation.AppRoutes.SettingsRoute
 import ru.phantom2097.troikaapp.navigation.AppRoutes.SubscriptionRoute
 import ru.phantom2097.troikaapp.navigation.AppRoutes.SummaryRoute
+import ru.phantom2097.troikaapp.navigation.NavigationState
 import ru.phantom2097.troikaapp.navigation.Navigator
 import ru.phantom2097.troikaapp.navigation.rememberNavigationState
 import ru.phantom2097.troikaapp.navigation.toEntries
@@ -64,29 +67,7 @@ fun App() {
                 BottomAppBarItem(
                     selectedKey = navigationState.topLevelRoute
                 ) { key ->
-                    when (key) {
-                        SummaryRoute -> {
-                            if (navigationState.topLevelRoute == key) {
-                                scope.launch {
-                                    eventBus.emit(NavEvent.SummaryReselected)
-                                }
-                            } else {
-                                navigator.goBack()
-                            }
-                        }
-
-                        HistoryRoute -> {
-                            navigator.navigate(HistoryRoute)
-                        }
-
-                        SubscriptionRoute -> {
-                            navigator.navigate(SubscriptionRoute)
-                        }
-
-                        SettingsRoute -> {
-                            navigator.navigate(SettingsRoute)
-                        }
-                    }
+                    bottomBarNavigation(key, navigationState, scope, eventBus, navigator)
                 }
             }
         ) { innerPadding ->
@@ -127,6 +108,38 @@ fun App() {
                     }
                 ),
             )
+        }
+    }
+}
+
+private fun bottomBarNavigation(
+    key: NavKey,
+    navigationState: NavigationState,
+    scope: CoroutineScope,
+    eventBus: AppBottomBarEventBus,
+    navigator: Navigator,
+) {
+    when (key) {
+        SummaryRoute -> {
+            if (navigationState.topLevelRoute == key) {
+                scope.launch {
+                    eventBus.emit(NavEvent.SummaryReselected)
+                }
+            } else {
+                navigator.goBack()
+            }
+        }
+
+        HistoryRoute -> {
+            navigator.navigate(HistoryRoute)
+        }
+
+        SubscriptionRoute -> {
+            navigator.navigate(SubscriptionRoute)
+        }
+
+        SettingsRoute -> {
+            navigator.navigate(SettingsRoute)
         }
     }
 }

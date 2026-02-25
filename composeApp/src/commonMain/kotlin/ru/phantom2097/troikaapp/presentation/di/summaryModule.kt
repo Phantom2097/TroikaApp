@@ -11,7 +11,7 @@ val summaryModule = module {
         SummaryViewModel(
             get(),
             get(),
-            get()
+            get(),
         )
     }
 

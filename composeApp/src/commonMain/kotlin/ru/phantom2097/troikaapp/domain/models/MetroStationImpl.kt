@@ -6,6 +6,6 @@ data class MetroStationImpl(
     override val stationName: String,
     override val lineNum: Int,
     override val lineColor: Int,
-    override val lineName: Int,
+    override val lineName: String,
     override val isOpen: Boolean
 ) : MetroStation

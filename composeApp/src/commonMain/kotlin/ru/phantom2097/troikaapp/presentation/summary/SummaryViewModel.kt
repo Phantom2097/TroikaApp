@@ -28,16 +28,12 @@ class SummaryViewModel(
     private val eventBus: AppBottomBarEventBus,
 ) : ViewModel() {
 
-    private val _amountSum = MutableStateFlow<Double>(AMOUNT_SUM_INITIAL_VALUE)
-    val amountSum
-        get() = _amountSum
-            .asStateFlow()
-            .onStart { /*getAmountSum()*/ }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_LIMIT),
-                initialValue = AMOUNT_SUM_INITIAL_VALUE
-            )
+    val amountSum = getTripHistoryUseCase.getAmountSum()
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(STOP_TIMEOUT_LIMIT),
+            AMOUNT_SUM_INITIAL_VALUE
+        )
 
     private val _uiState = MutableStateFlow<SummaryUiState>(SummaryUiState.Loading)
     val uiState get() = _uiState.asStateFlow()
@@ -62,14 +58,6 @@ class SummaryViewModel(
                 if (event is NavEvent.SummaryReselected) {
                     _scrollToTop.emit(Unit)
                 }
-            }
-        }
-    }
-
-    private fun getAmountSum() {
-        viewModelScope.launch {
-            getTripHistoryUseCase.invoke().collect { list ->
-                _amountSum.update { list.sumOf { it.price } }
             }
         }
     }

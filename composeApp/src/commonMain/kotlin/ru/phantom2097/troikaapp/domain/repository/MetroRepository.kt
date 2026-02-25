@@ -6,7 +6,8 @@ import ru.phantom2097.troikaapp.domain.entites.TripInfo
 interface MetroRepository {
 
     fun getTripHistory(): Flow<List<TripInfo>>
-    suspend fun getAmountSpentSum(): Flow<Double>
+
+    fun getAmountSpentSum(): Flow<Double>
 
     suspend fun removeTripHistory()
 

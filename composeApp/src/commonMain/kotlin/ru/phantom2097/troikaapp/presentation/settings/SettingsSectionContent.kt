@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import ru.phantom2097.troikaapp.presentation.ui.theme.AppTheme
@@ -39,21 +40,21 @@ fun SettingsSectionContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(4.dp))
-                    .background(color = MaterialTheme.colorScheme.secondaryFixed)
+                    .background(color = MaterialTheme.colorScheme.secondaryContainer)
                     .padding(12.dp)
             ) {
                 Text(
                     text = item,
-                    color = MaterialTheme.colorScheme.onSecondaryFixed
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
         }
-
     }
 }
 
-@Composable
 @Preview
+@PreviewDynamicColors
+@Composable
 private fun SettingsSectionContentPreview() {
     AppTheme {
         SettingsSectionContent(

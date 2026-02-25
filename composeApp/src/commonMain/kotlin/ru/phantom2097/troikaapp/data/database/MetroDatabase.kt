@@ -25,6 +25,6 @@ abstract class MetroDatabase : RoomDatabase() {
 
     companion object {
         const val DATABASE_NAME = "metro_db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 1
     }
 }
