@@ -19,16 +19,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.vectorResource
 import ru.phantom2097.troikaapp.presentation.ui.theme.AppTheme
 import ru.phantom2097.troikaapp.resources.Res
 import ru.phantom2097.troikaapp.resources.alt_arrow_down_outline
+import kotlin.repeat
 
 @Composable
 fun SummaryListItem(
     modifier: Modifier = Modifier,
+    title: String,
     openScreenClickListener: () -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -42,13 +45,15 @@ fun SummaryListItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(vertical = 4.dp, horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Заголовок"
+                text = title,
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
             )
 
             IconButton(
@@ -57,8 +62,10 @@ fun SummaryListItem(
                 },
             ) {
                 Icon(
+                    modifier = Modifier.rotate(270f),
                     imageVector = vectorResource(Res.drawable.alt_arrow_down_outline),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }
@@ -68,7 +75,7 @@ fun SummaryListItem(
                 .height(IntrinsicSize.Min)
                 .padding(4.dp)
                 .clip(shape = MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .background(MaterialTheme.colorScheme.surfaceContainer)
                 .padding(4.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -82,24 +89,15 @@ fun SummaryListItem(
 fun SummaryListItemPreview() {
     AppTheme {
         SummaryListItem(
+            title = "Заголовок",
             openScreenClickListener = { }
         ) {
-            Column() {
-                Text(
-                    text = "Тут какой-то экран"
-                )
-                Text(
-                    text = "Тут какой-то экран"
-                )
-                Text(
-                    text = "Тут какой-то экран"
-                )
-                Text(
-                    text = "Тут какой-то экран"
-                )
-                Text(
-                    text = "Тут какой-то экран"
-                )
+            Column {
+                repeat(6) {
+                    Text(
+                        text = "Тут какой-то экран"
+                    )
+                }
             }
         }
     }

@@ -84,7 +84,8 @@ fun App() {
                                 },
                                 navToHistoryScreen = {
                                     navigator.navigate(HistoryRoute)
-                                }
+                                },
+                                navigator = navigator
                             )
                         }
                         entry<HistoryRoute> {

@@ -28,7 +28,11 @@ import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
+import ru.phantom2097.troikaapp.navigation.AppRoutes
+import ru.phantom2097.troikaapp.navigation.Navigator
+import ru.phantom2097.troikaapp.navigation.rememberNavigationState
 import ru.phantom2097.troikaapp.presentation.ProgressItemWithText
+import ru.phantom2097.troikaapp.presentation.history.charts.DemoLineChart
 import ru.phantom2097.troikaapp.presentation.ui.theme.AppTheme
 
 @Composable
@@ -36,6 +40,7 @@ fun SummaryScreen(
     innerPadding: PaddingValues,
     navToHistoryScreen: () -> Unit,
     datePicker: () -> Unit,
+    navigator: Navigator,
     summaryViewModel: SummaryViewModel = koinViewModel<SummaryViewModel>(),
 ) {
     val scrollState = rememberLazyListState()
@@ -54,7 +59,9 @@ fun SummaryScreen(
         startDate = summaryViewModel.getStartDate(),
         endDate = summaryViewModel.getEndDate(),
         datePicker = { datePicker() },
-    ) { navToHistoryScreen() }
+        navToHistoryScreen = { navToHistoryScreen() },
+        navigator = navigator
+    )
 }
 
 @Composable
@@ -67,6 +74,7 @@ fun SummaryLayout(
     endDate: String,
     datePicker: () -> Unit,
     navToHistoryScreen: () -> Unit,
+    navigator: Navigator
 ) {
     val density = LocalDensity.current
 
@@ -85,6 +93,39 @@ fun SummaryLayout(
                 bottom = innerPadding.calculateBottomPadding()
             )
         ) {
+            item {
+                SummaryListItem(
+                    modifier = Modifier.padding(4.dp),
+                    title = "Статистика",
+                    openScreenClickListener = { navigator.navigate(AppRoutes.HistoryRoute)}
+                ) {
+                    DemoLineChart()
+                }
+            }
+            item {
+                SummaryListItem(
+                    modifier = Modifier.padding(4.dp),
+                    title = "История",
+                    openScreenClickListener = {}
+                ) {
+                    Text(
+                        text = "Здесь будут последние поездки",
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+            item {
+                SummaryListItem(
+                    modifier = Modifier.padding(4.dp),
+                    title = "Подписки",
+                    openScreenClickListener = {}
+                ) {
+                    Text(
+                        text = "Здесь будет сравнение подписки с оплатой",
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
             items(50) {
                 HorizontalDivider(modifier = Modifier.padding(4.dp))
                 Text(
@@ -138,7 +179,9 @@ private fun SummaryScreenPreview() {
             startDate = "16.23.3444",
             endDate = "27.43.2333",
             scrollState = rememberLazyListState(),
-            datePicker = {}
-        ) { }
+            datePicker = {},
+            navToHistoryScreen = {},
+            navigator = Navigator(rememberNavigationState(AppRoutes.SummaryRoute, emptySet()))
+        )
     }
 }

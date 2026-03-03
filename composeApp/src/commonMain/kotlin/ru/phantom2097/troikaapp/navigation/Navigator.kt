@@ -1,7 +1,9 @@
 package ru.phantom2097.troikaapp.navigation
 
+import androidx.compose.runtime.Stable
 import androidx.navigation3.runtime.NavKey
 
+@Stable
 class Navigator(val state: NavigationState) {
 
     fun navigate(route: NavKey) {
