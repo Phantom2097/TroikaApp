@@ -1,7 +1,7 @@
 package ru.phantom2097.troikaapp.domain.models
 
-import ru.phantom2097.troikaapp.domain.entites.MetroStation
-import ru.phantom2097.troikaapp.domain.entites.TripInfo
+import ru.phantom2097.troikaapp.domain.entities.MetroStation
+import ru.phantom2097.troikaapp.domain.entities.TripInfo
 import kotlin.time.Instant
 
 data class TripInfoImpl(

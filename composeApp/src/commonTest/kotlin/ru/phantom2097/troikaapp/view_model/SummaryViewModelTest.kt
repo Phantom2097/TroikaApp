@@ -1,5 +1,6 @@
 package ru.phantom2097.troikaapp.view_model
 
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -66,7 +67,7 @@ internal class SummaryViewModelTest {
     fun `amountSum is changed correctly`() = runTest {
         val results = mutableListOf<Double>()
 
-        val job = launch(UnconfinedTestDispatcher()) {
+        val job = launch(UnconfinedTestDispatcher() + CoroutineName("Test coroutine scope")) {
             viewModel.amountSum.collect { results.add(it) }
         }
 

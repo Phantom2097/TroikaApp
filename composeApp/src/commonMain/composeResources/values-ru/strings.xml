@@ -1,0 +1,22 @@
+<resources>
+
+    <string name="app_name">Проездной в метро</string>
+    <string name="language_setting">Язык приложения</string>
+    <string name="notifications_enabled_setting">Уведомления</string>
+
+    <string name="summary_screen_label">Сводка</string>
+    <string name="history_screen_label">История</string>
+    <string name="subscriptions_screen_label">Подписки</string>
+    <string name="settings_screen_label">Настройки</string>
+
+    <string name="app_language_setting_text">Язык приложения</string>
+    <string name="app_language_setting_system">Как в системе</string>
+    <string name="app_language_setting_en">Английский</string>
+    <string name="app_language_setting_ru">Русский</string>
+
+    <string name="app_theme_setting">Тема приложения</string>
+    <string name="app_theme_setting_subText">Изменение темы приложения</string>
+    <string name="app_theme_setting_system">Как в системе</string>
+    <string name="app_theme_setting_dark">Тёмная тема</string>
+    <string name="app_theme_setting_light">Светлая тема</string>
+</resources>

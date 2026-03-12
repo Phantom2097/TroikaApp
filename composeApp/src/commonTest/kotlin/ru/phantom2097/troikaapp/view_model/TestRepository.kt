@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
-import ru.phantom2097.troikaapp.domain.entites.TripInfo
+import ru.phantom2097.troikaapp.domain.entities.TripInfo
 import ru.phantom2097.troikaapp.domain.models.MetroStationImpl
 import ru.phantom2097.troikaapp.domain.models.TripInfoImpl
 import ru.phantom2097.troikaapp.domain.repository.MetroRepository

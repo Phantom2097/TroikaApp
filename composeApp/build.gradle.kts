@@ -14,15 +14,8 @@ plugins {
 
 kotlin {
     jvmToolchain(21)
-//    compilerOptions {
-//        freeCompilerArgs.apply {
-//            add("-Xskip-prerelease-check")
-//            add("-Xexplicit-backing-fields")
-//            add("-XXLanguage:+ExplicitBackingFields")
-//        }
-//    }
 
-    androidLibrary {
+    android {
         namespace = "ru.phantom2097.trikaapp"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
 

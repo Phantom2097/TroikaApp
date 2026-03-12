@@ -1,4 +1,4 @@
-package ru.phantom2097.troikaapp.domain.entites
+package ru.phantom2097.troikaapp.domain.entities
 
 import kotlin.time.Instant
 

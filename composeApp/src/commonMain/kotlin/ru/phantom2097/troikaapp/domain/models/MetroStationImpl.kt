@@ -1,6 +1,6 @@
 package ru.phantom2097.troikaapp.domain.models
 
-import ru.phantom2097.troikaapp.domain.entites.MetroStation
+import ru.phantom2097.troikaapp.domain.entities.MetroStation
 
 data class MetroStationImpl(
     override val stationName: String,

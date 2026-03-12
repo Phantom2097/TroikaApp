@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import ru.phantom2097.troikaapp.data.database.MetroDatabase
 import ru.phantom2097.troikaapp.data.mappers.TripMapper.toTripInfo
-import ru.phantom2097.troikaapp.domain.entites.TripInfo
+import ru.phantom2097.troikaapp.domain.entities.TripInfo
 import ru.phantom2097.troikaapp.domain.repository.MetroRepository
 
 class MetroRepositoryImpl(

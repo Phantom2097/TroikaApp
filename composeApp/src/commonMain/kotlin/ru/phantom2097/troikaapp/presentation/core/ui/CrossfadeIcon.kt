@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import ru.phantom2097.troikaapp.presentation.core.bottom_bar.AppTabs
 
@@ -89,6 +90,6 @@ private fun CrossfadeIconPreview(
         isSelectedIcon = true,
         iconSelected = item.iconBold,
         iconUnselected = item.iconOutline,
-        description = item.description,
+        description = stringResource(item.description),
     )
 }

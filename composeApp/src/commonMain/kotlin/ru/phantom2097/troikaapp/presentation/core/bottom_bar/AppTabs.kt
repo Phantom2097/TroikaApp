@@ -2,50 +2,55 @@ package ru.phantom2097.troikaapp.presentation.core.bottom_bar
 
 import androidx.navigation3.runtime.NavKey
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
 import ru.phantom2097.troikaapp.navigation.AppRoutes
 import ru.phantom2097.troikaapp.resources.Res
 import ru.phantom2097.troikaapp.resources.clipboard_bold
 import ru.phantom2097.troikaapp.resources.clipboard_outline
+import ru.phantom2097.troikaapp.resources.history_screen_label
 import ru.phantom2097.troikaapp.resources.home_smile_bold
 import ru.phantom2097.troikaapp.resources.home_smile_outline
 import ru.phantom2097.troikaapp.resources.library_bold
 import ru.phantom2097.troikaapp.resources.library_outline
 import ru.phantom2097.troikaapp.resources.settings_bold
 import ru.phantom2097.troikaapp.resources.settings_outline
+import ru.phantom2097.troikaapp.resources.settings_screen_label
+import ru.phantom2097.troikaapp.resources.subscriptions_screen_label
+import ru.phantom2097.troikaapp.resources.summary_screen_label
 
 enum class AppTabs(
-    val label: String,
+    val label: StringResource,
     val iconBold: DrawableResource,
     val iconOutline: DrawableResource,
-    val description: String? = null,
+    val description: StringResource,
     val route: NavKey,
 ) {
     Summary(
-        "Сводка",
-        Res.drawable.home_smile_bold,
-        Res.drawable.home_smile_outline,
-        "Сводка",
+        label = Res.string.summary_screen_label,
+        iconBold = Res.drawable.home_smile_bold,
+        iconOutline = Res.drawable.home_smile_outline,
+        description = Res.string.summary_screen_label,
         route = AppRoutes.SummaryRoute
     ),
     History(
-        "История",
+        Res.string.history_screen_label,
         Res.drawable.library_bold,
         Res.drawable.library_outline,
-        description = null,
+        description = Res.string.history_screen_label,
         route = AppRoutes.HistoryRoute
     ),
     Subscription(
-        "Подписки",
+        Res.string.subscriptions_screen_label,
         Res.drawable.clipboard_bold,
         Res.drawable.clipboard_outline,
-        null,
+        description = Res.string.subscriptions_screen_label,
         route = AppRoutes.SubscriptionRoute
     ),
     Settings(
-        "Настройки",
+        Res.string.settings_screen_label,
         Res.drawable.settings_bold,
         Res.drawable.settings_outline,
-        null,
+        description = Res.string.settings_screen_label,
         route = AppRoutes.SettingsRoute
     )
 }

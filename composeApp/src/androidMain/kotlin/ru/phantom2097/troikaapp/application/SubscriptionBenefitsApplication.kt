@@ -4,9 +4,11 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
+import ru.phantom2097.troikaapp.data.di.platformDataStoreModule
 import ru.phantom2097.troikaapp.data.di.repositoryModule
 import ru.phantom2097.troikaapp.di.commonModule
 import ru.phantom2097.troikaapp.domain.di.useCasesModule
+import ru.phantom2097.troikaapp.presentation.di.settingsModule
 import ru.phantom2097.troikaapp.presentation.di.summaryModule
 
 class SubscriptionBenefitsApplication : Application() {
@@ -28,7 +30,9 @@ private fun initKoin(appDeclaration: KoinAppDeclaration) {
             commonModule,
             useCasesModule,
             repositoryModule,
-            summaryModule
+            summaryModule,
+            platformDataStoreModule,
+            settingsModule
         )
     }
 }

@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Metro subscription app</string>
+    <string name="language_setting">Language of application</string>
+    <string name="notifications_enabled_setting">Notifications</string>
+
+    <string name="summary_screen_label">Summary</string>
+    <string name="history_screen_label">History</string>
+    <string name="subscriptions_screen_label">Subscriptions</string>
+    <string name="settings_screen_label">Settings</string>
+
+    <string name="app_language_setting_text">App language</string>
+    <string name="app_language_setting_system">Like system</string>
+    <string name="app_language_setting_en">English</string>
+    <string name="app_language_setting_ru">Russian</string>
+
+    <string name="app_theme_setting">App theme</string>
+    <string name="app_theme_setting_subText">Change app theme</string>
+    <string name="app_theme_setting_system">Like system</string>
+    <string name="app_theme_setting_dark">Dark theme</string>
+    <string name="app_theme_setting_light">Light theme</string>
+</resources>

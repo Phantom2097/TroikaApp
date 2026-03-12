@@ -1,8 +1,10 @@
 package ru.phantom2097.troikaapp.di
 
 import org.koin.core.context.startKoin
+import ru.phantom2097.troikaapp.data.di.platformDataStoreModule
 import ru.phantom2097.troikaapp.data.di.repositoryModule
 import ru.phantom2097.troikaapp.domain.di.useCasesModule
+import ru.phantom2097.troikaapp.presentation.di.settingsModule
 import ru.phantom2097.troikaapp.presentation.di.summaryModule
 
 internal fun initKoin() {
@@ -11,7 +13,9 @@ internal fun initKoin() {
             commonModule,
             useCasesModule,
             repositoryModule,
-            summaryModule
+            summaryModule,
+            platformDataStoreModule,
+            settingsModule
         )
     }
 }

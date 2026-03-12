@@ -15,9 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
+import org.jetbrains.compose.resources.stringResource
 import ru.phantom2097.troikaapp.presentation.core.ui.CrossfadeIcon
 import ru.phantom2097.troikaapp.presentation.core.ui.CrossfadeIconDefaults
 
@@ -39,6 +42,7 @@ fun BottomAppBarItem(
     }
 
     val tabs = remember { AppTabs.entries }
+    val hapticFeedback = LocalHapticFeedback.current
 
     ShortNavigationBar(
         modifier = Modifier.background(
@@ -61,6 +65,7 @@ fun BottomAppBarItem(
                 ShortNavigationBarItem(
                     selected = isSelectedKey,
                     onClick = {
+                        hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                         onClick(item.route)
                     },
                     icon = {
@@ -68,7 +73,7 @@ fun BottomAppBarItem(
                             isSelectedIcon = isSelectedKey,
                             iconSelected = item.iconBold,
                             iconUnselected = item.iconOutline,
-                            description = item.description,
+                            description = stringResource(item.description),
                             colors = CrossfadeIconDefaults.colors(
                                 selectedIconColor = MaterialTheme.colorScheme.primary,
                                 unSelectedIconColor = MaterialTheme.colorScheme.onSurface
@@ -77,7 +82,7 @@ fun BottomAppBarItem(
                     },
                     label = {
                         Text(
-                            text = item.label,
+                            text = stringResource(item.label),
                             color = if (isSelectedKey) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                             fontSize = 14.sp
                         )

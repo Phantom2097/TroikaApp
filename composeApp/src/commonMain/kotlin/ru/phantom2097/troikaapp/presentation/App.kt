@@ -1,5 +1,6 @@
 package ru.phantom2097.troikaapp.presentation
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -7,12 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
+import ru.phantom2097.troikaapp.domain.entities.settings.AppTheme
 import ru.phantom2097.troikaapp.navigation.AppRoutes
 import ru.phantom2097.troikaapp.navigation.AppRoutes.HistoryRoute
 import ru.phantom2097.troikaapp.navigation.AppRoutes.SelectTargetPeriodRoute
@@ -29,6 +33,7 @@ import ru.phantom2097.troikaapp.presentation.core.app_events.model.AppBottomBarE
 import ru.phantom2097.troikaapp.presentation.core.bottom_bar.BottomAppBarItem
 import ru.phantom2097.troikaapp.presentation.history.HistoryScreen
 import ru.phantom2097.troikaapp.presentation.settings.SettingsScreen
+import ru.phantom2097.troikaapp.presentation.settings.SettingsViewModel
 import ru.phantom2097.troikaapp.presentation.subscription.SubscriptionScreen
 import ru.phantom2097.troikaapp.presentation.summary.SummaryScreen
 import ru.phantom2097.troikaapp.presentation.summary.select_date.SelectTargetPeriod
@@ -50,10 +55,19 @@ fun App() {
         )
     }
 
+    val settingsViewModel = koinViewModel<SettingsViewModel>()
+    val settingsState = settingsViewModel.appSettings.collectAsStateWithLifecycle()
+
     val eventBus: AppBottomBarEventBus = koinInject()
     val scope = rememberCoroutineScope()
 
-    AppTheme {
+    AppTheme(
+        darkTheme = when(settingsState.value.theme) {
+            AppTheme.SYSTEM -> isSystemInDarkTheme()
+            AppTheme.LIGHT_MODE -> false
+            AppTheme.DARK_MODE -> true
+        }
+    ) {
         Scaffold(
             topBar = {
                 TopAppBarItem(
@@ -63,7 +77,6 @@ fun App() {
                 )
             },
             bottomBar = {
-                // TODO: extract into another file
                 BottomAppBarItem(
                     selectedKey = navigationState.topLevelRoute
                 ) { key ->

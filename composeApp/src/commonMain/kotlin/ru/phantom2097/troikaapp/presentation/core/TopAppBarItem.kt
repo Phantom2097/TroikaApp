@@ -41,7 +41,6 @@ private fun TopAppBarItemActions(settingsClickListener: () -> Unit) {
         onClick = {
             settingsClickListener()
         }
-
     ) {
         Icon(
             modifier = Modifier.size(32.dp),

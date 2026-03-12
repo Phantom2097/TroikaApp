@@ -1,7 +1,7 @@
 package ru.phantom2097.troikaapp.data.mappers
 
 import ru.phantom2097.troikaapp.data.relation.TripInfoRelation
-import ru.phantom2097.troikaapp.domain.entites.TripInfo
+import ru.phantom2097.troikaapp.domain.entities.TripInfo
 import ru.phantom2097.troikaapp.domain.models.MetroStationImpl
 import ru.phantom2097.troikaapp.domain.models.TripInfoImpl
 import kotlin.time.Instant

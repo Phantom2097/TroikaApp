@@ -1,24 +1,30 @@
 package ru.phantom2097.troikaapp.presentation.settings
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import ru.phantom2097.troikaapp.domain.entities.settings.AppSettings
+import ru.phantom2097.troikaapp.domain.entities.settings.AppTheme
+import ru.phantom2097.troikaapp.resources.Res
+import ru.phantom2097.troikaapp.resources.app_theme_setting
+import ru.phantom2097.troikaapp.resources.app_theme_setting_subText
 
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    settingsList: List<Pair<String, List<String>>> = settings,
     innerPadding: PaddingValues = PaddingValues(),
 ) {
+    val settingsViewModel = koinViewModel<SettingsViewModel>()
+    val settingsState = settingsViewModel.appSettings.collectAsStateWithLifecycle()
+
     val paddingValues = PaddingValues(
         end = innerPadding.calculateEndPadding(LayoutDirection.Ltr),
         start = innerPadding.calculateStartPadding(LayoutDirection.Ltr),
@@ -26,72 +32,42 @@ fun SettingsScreen(
     )
     val topPadding = innerPadding.calculateTopPadding()
 
-    LazyColumn(
+    SettingsLayout(
         modifier = modifier
             .padding(top = topPadding),
+        paddingValues = paddingValues,
+        currentAppSettings = settingsState.value,
+        settingsViewModel = settingsViewModel
+    )
+}
+
+@Composable
+private fun SettingsLayout(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues,
+    currentAppSettings: AppSettings,
+    settingsViewModel: SettingsViewModel, // use Events
+) {
+    LazyColumn(
+        modifier = modifier,
         contentPadding = paddingValues
     ) {
         item {
-            SettingsIconWithSwitch(
-                "Switch",
-                false,
-                { }
+            SettingsIconWithMultipleChoose(
+                label = stringResource(Res.string.app_theme_setting),
+                selectedOption = stringResource(currentAppSettings.theme.strRes),
+                options = AppTheme.entries.map { stringResource(it.strRes) },
+                onOptionSelected = { newThemeId ->
+                    settingsViewModel.changeTheme(AppTheme.fromInt(newThemeId)) // I think is bad shit, but now I don't know how to implement this better
+                },
+                subText = stringResource(Res.string.app_theme_setting_subText)
             )
         }
         item {
-            SettingsIconWithMultipleChoose(
-                "MultipleChoose",
-                initialValue = false,
-                { }
-            )
+
         }
-        settingsList.fastForEach { (title, item) ->
-            stickyHeader {
-                SettingsBlockHeader(
-                    text = title
-                )
-            }
-            item {
-                SettingsSectionContent(
-                    modifier = Modifier.padding(horizontal = 4.dp),
-                    settingsItems = item
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+        item {
+
         }
     }
 }
-
-
-private val settings = listOf(
-    "Общие" to listOf(
-        "Настройка 1",
-        "Настройка 2",
-        "Настройка 3",
-        "Настройка 4",
-        "Настройка 5",
-        "Настройка 6",
-        "Настройка 7",
-        "Настройка 8",
-    ),
-    "Специальные" to listOf(
-        "Настройка 1",
-        "Настройка 2",
-        "Настройка 3",
-        "Настройка 4",
-        "Настройка 5",
-        "Настройка 6",
-        "Настройка 7",
-        "Настройка 8",
-    ),
-    "Для разработчика" to listOf(
-        "Настройка 1",
-        "Настройка 2",
-        "Настройка 3",
-        "Настройка 4",
-        "Настройка 5",
-        "Настройка 6",
-        "Настройка 7",
-        "Настройка 8",
-    )
-)

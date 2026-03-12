@@ -20,6 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.vectorResource
@@ -35,6 +37,8 @@ fun SummaryListItem(
     openScreenClickListener: () -> Unit,
     content: @Composable () -> Unit,
 ) {
+    val hapticFeedback = LocalHapticFeedback.current
+
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -58,6 +62,7 @@ fun SummaryListItem(
 
             IconButton(
                 onClick = {
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
                     openScreenClickListener()
                 },
             ) {
@@ -75,8 +80,7 @@ fun SummaryListItem(
                 .height(IntrinsicSize.Min)
                 .padding(4.dp)
                 .clip(shape = MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(4.dp),
+                .background(MaterialTheme.colorScheme.surfaceContainer),
             contentAlignment = Alignment.Center
         ) {
             content()
