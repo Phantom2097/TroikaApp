@@ -14,8 +14,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -74,11 +75,22 @@ fun SummaryLayout(
     endDate: String,
     datePicker: () -> Unit,
     navToHistoryScreen: () -> Unit,
-    navigator: Navigator
+    navigator: Navigator,
 ) {
     val density = LocalDensity.current
 
-    var headerHeightDp by remember { mutableStateOf(0.dp) }
+    var maxHeaderHeightPx by remember { mutableIntStateOf(0) }
+    val maxHeaderHeightDp = with(density) { maxHeaderHeightPx.toDp() }
+
+    val scrollOffsetPx by remember {
+        derivedStateOf {
+            if (scrollState.firstVisibleItemIndex == 0) {
+                scrollState.firstVisibleItemScrollOffset
+            } else {
+                Int.MAX_VALUE
+            }
+        }
+    }
 
     Box(
         modifier = modifier
@@ -89,7 +101,7 @@ fun SummaryLayout(
             modifier = Modifier,
             state = scrollState,
             contentPadding = PaddingValues(
-                top = innerPadding.calculateTopPadding() + headerHeightDp,
+                top = innerPadding.calculateTopPadding() + maxHeaderHeightDp,
                 bottom = innerPadding.calculateBottomPadding()
             )
         ) {
@@ -97,7 +109,7 @@ fun SummaryLayout(
                 SummaryListItem(
                     modifier = Modifier.padding(4.dp),
                     title = "Статистика",
-                    openScreenClickListener = { navigator.navigate(AppRoutes.HistoryRoute)}
+                    openScreenClickListener = { navigator.navigate(AppRoutes.HistoryRoute) }
                 ) {
                     DemoLineChart()
                 }
@@ -145,7 +157,7 @@ fun SummaryLayout(
                 .fillMaxWidth()
                 .padding(top = innerPadding.calculateTopPadding())
                 .onSizeChanged { size ->
-                    headerHeightDp = with(density) { size.height.toDp() }
+                    if (size.height > maxHeaderHeightPx) maxHeaderHeightPx = size.height
                 }
                 .background(
                     brush = Brush.verticalGradient(
@@ -159,6 +171,7 @@ fun SummaryLayout(
         ) {
             TopScreenItem(
                 modifier = Modifier,
+                scrollProvider = { scrollOffsetPx },
                 startDate = startDate,
                 endDate = endDate,
                 allSum = allSum,

@@ -16,6 +16,8 @@ enum class Language(val strRes: StringResource) {
 
         fun fromString(strName: String): Language = entries.firstOrNull {
             it.name == strName
-        } ?: SYSTEM
+        } ?: defaultValue
+
+        fun fromInt(id: Int): Language = entries.getOrNull(id) ?: defaultValue
     }
 }

@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import ru.phantom2097.troikaapp.domain.entities.settings.AppSettings
 import ru.phantom2097.troikaapp.domain.entities.settings.AppTheme
 import ru.phantom2097.troikaapp.navigation.AppRoutes
 import ru.phantom2097.troikaapp.navigation.AppRoutes.HistoryRoute
@@ -33,6 +34,7 @@ import ru.phantom2097.troikaapp.presentation.core.app_events.model.AppBottomBarE
 import ru.phantom2097.troikaapp.presentation.core.bottom_bar.BottomAppBarItem
 import ru.phantom2097.troikaapp.presentation.history.HistoryScreen
 import ru.phantom2097.troikaapp.presentation.settings.SettingsScreen
+import ru.phantom2097.troikaapp.presentation.settings.SettingsState
 import ru.phantom2097.troikaapp.presentation.settings.SettingsViewModel
 import ru.phantom2097.troikaapp.presentation.subscription.SubscriptionScreen
 import ru.phantom2097.troikaapp.presentation.summary.SummaryScreen
@@ -40,10 +42,19 @@ import ru.phantom2097.troikaapp.presentation.summary.select_date.SelectTargetPer
 import ru.phantom2097.troikaapp.presentation.ui.theme.AppTheme
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun App() {
+    val settingsViewModel = koinViewModel<SettingsViewModel>()
+    val settingsState = settingsViewModel.appSettings.collectAsStateWithLifecycle()
 
+    (settingsState.value as? SettingsState.Success)?.let { successState ->
+        MainContent(successState.settings)
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
+@Composable
+private fun MainContent(appSettings: AppSettings) {
     val navigationState = rememberNavigationState(
         startRoute = SummaryRoute,
         topLevelRoutes = AppRoutes.TOP_LEVEL_DESTINATIONS.keys
@@ -55,18 +66,17 @@ fun App() {
         )
     }
 
-    val settingsViewModel = koinViewModel<SettingsViewModel>()
-    val settingsState = settingsViewModel.appSettings.collectAsStateWithLifecycle()
-
     val eventBus: AppBottomBarEventBus = koinInject()
     val scope = rememberCoroutineScope()
 
+    val theme = when (appSettings.theme) {
+        AppTheme.SYSTEM -> isSystemInDarkTheme()
+        AppTheme.LIGHT_MODE -> false
+        AppTheme.DARK_MODE -> true
+    }
+
     AppTheme(
-        darkTheme = when(settingsState.value.theme) {
-            AppTheme.SYSTEM -> isSystemInDarkTheme()
-            AppTheme.LIGHT_MODE -> false
-            AppTheme.DARK_MODE -> true
-        }
+        darkTheme = theme
     ) {
         Scaffold(
             topBar = {
@@ -106,6 +116,7 @@ fun App() {
                         }
                         entry<SettingsRoute> {
                             SettingsScreen(
+                                appSettings = appSettings,
                                 innerPadding = innerPadding
                             )
                         }

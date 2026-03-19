@@ -19,4 +19,7 @@
     <string name="app_theme_setting_system">Как в системе</string>
     <string name="app_theme_setting_dark">Тёмная тема</string>
     <string name="app_theme_setting_light">Светлая тема</string>
+
+    <string name="app_notifications_setting_text">Уведомления</string>
+    <string name="app_notifications_setting_subText">Уведомления от приложения</string>
 </resources>

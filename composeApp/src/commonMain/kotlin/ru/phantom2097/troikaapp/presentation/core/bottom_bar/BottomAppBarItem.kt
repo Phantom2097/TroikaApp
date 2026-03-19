@@ -45,9 +45,11 @@ fun BottomAppBarItem(
     val hapticFeedback = LocalHapticFeedback.current
 
     ShortNavigationBar(
-        modifier = Modifier.background(
-            brush = backgroundBrush
-        ), containerColor = Color.Transparent
+        modifier = Modifier
+            .background(
+                brush = backgroundBrush
+            ),
+        containerColor = Color.Transparent,
     ) {
         Row(
             modifier = Modifier

@@ -46,7 +46,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.compose.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.testExt.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,6 +56,14 @@ dependencies {
     implementation(libs.androidx.glance)
     debugImplementation(libs.androidx.glance.appwidget.preview)
     debugImplementation(libs.androidx.glance.preview)
+
     // For interop APIs with Material 3
     implementation(libs.androidx.glance.material3)
+
+    // Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
+
+    // SplashScreen
+    implementation(libs.androidx.core.splashscreen)
 }

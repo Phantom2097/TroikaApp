@@ -15,13 +15,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.vectorResource
+import ru.phantom2097.troikaapp.presentation.core.ui.collapseAndClip
 import ru.phantom2097.troikaapp.presentation.ui.theme.AppTheme
 import ru.phantom2097.troikaapp.resources.Res
 import ru.phantom2097.troikaapp.resources.outline_edit_calendar_24
@@ -29,12 +35,17 @@ import ru.phantom2097.troikaapp.resources.outline_edit_calendar_24
 @Composable
 fun TopScreenItem(
     modifier: Modifier = Modifier,
+    scrollProvider: () -> Int,
     startDate: String,
     endDate: String,
     allSum: String,
     datePickerListener: () -> Unit,
     loadDataListener: () -> Unit,
 ) {
+
+    var topBlock by remember { mutableIntStateOf(0) }
+    var bottomBlock by remember { mutableIntStateOf(0) }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -49,47 +60,62 @@ fun TopScreenItem(
         ) {
             Spacer(modifier = Modifier.height(4.dp))
 
-            Text(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(
-                        vertical = 4.dp,
-                        horizontal = 8.dp
-                    ),
-                text = "Всего потрачено",
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            CurrentWastedSum(allSum)
-
-            Spacer(modifier = Modifier.height(4.dp))
-
             Column(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .clickable {
-                        datePickerListener()
+                    .collapseAndClip {
+                        scrollProvider().coerceIn(0, topBlock)
                     }
-                    .padding(vertical = 4.dp, horizontal = 8.dp),
-                verticalArrangement = Arrangement.Center,
+                    .onSizeChanged { topBlock = it.height },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = vectorResource(Res.drawable.outline_edit_calendar_24),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "$startDate - $endDate",
-                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .padding(
+                            vertical = 4.dp,
+                            horizontal = 8.dp
+                        ),
+                    text = "Всего потрачено",
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
+
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+
+            CurrentWastedSum(allSum)
+            Column(
+                modifier = Modifier
+                    .collapseAndClip {
+                        maxOf(0, scrollProvider() - topBlock).coerceIn(0, bottomBlock)
+                    }
+                    .onSizeChanged { bottomBlock = it.height }
+            ) {
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Column(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .clickable {
+                            datePickerListener()
+                        }
+                        .padding(vertical = 4.dp, horizontal = 8.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = vectorResource(Res.drawable.outline_edit_calendar_24),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "$startDate - $endDate",
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -103,6 +129,7 @@ private fun TopScreenItemPreview() {
     AppTheme {
         TopScreenItem(
             startDate = "19.06.1940",
+            scrollProvider = { 0 },
             endDate = "28.06.1988",
             allSum = "60000",
             datePickerListener = { }
