@@ -13,13 +13,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import ru.phantom2097.troikaapp.domain.use_cases.GetTripHistoryUseCase
 import ru.phantom2097.troikaapp.domain.use_cases.SelectTargetPeriodUseCase
 import ru.phantom2097.troikaapp.presentation.core.app_events.NavEvent
 import ru.phantom2097.troikaapp.presentation.core.app_events.model.AppBottomBarEventBus
-import ru.phantom2097.troikaapp.presentation.utils.toFormattedDate
-import kotlin.time.Instant
+import ru.phantom2097.troikaapp.presentation.utils.date.toFormattedDate
 
 class SummaryViewModel(
     private val getTripHistoryUseCase: GetTripHistoryUseCase,
@@ -49,8 +47,13 @@ class SummaryViewModel(
             started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_LIMIT)
         )
 
-    private val _selectedDates = MutableStateFlow<Pair<Long, Long>>(0L to 0L)
-    val selectedDates = _selectedDates.asStateFlow()
+    private val _dateRange = MutableStateFlow<DateRangePickerState>(DateRangePickerState.Loading)
+    val dateRange = _dateRange
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = DateRangePickerState.Loading
+        )
 
     fun startCollectEvent() {
         viewModelScope.launch {
@@ -63,39 +66,16 @@ class SummaryViewModel(
     }
 
     fun updateSelectedDates(start: Long?, end: Long?) {
+        val timeZone = TimeZone.currentSystemDefault()
         val startDate =
-            start?.toFormattedDate() ?: throw IllegalArgumentException("Неверная начальная дата")
+            start?.toFormattedDate(timeZone) ?: throw IllegalArgumentException("Неверная начальная дата")
         val endDate =
-            end?.toFormattedDate() ?: throw IllegalArgumentException("Неверная конечная дата")
+            end?.toFormattedDate(timeZone) ?: throw IllegalArgumentException("Неверная конечная дата")
 
-        _uiState.update {
-            SummaryUiState.SummaryData(
-                startDate = startDate,
-                endDate = endDate,
-            )
+        _dateRange.update {
+            DateRangePickerState.DateRange("$startDate - $endDate")
         }
     }
-
-    // TODO: remove that shit
-    fun getStartDate(): String {
-        val instant = Instant.fromEpochMilliseconds(selectedDates.value.first)
-        val dateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-        val startDate = dateTime.date.toString()
-
-        return startDate
-    }
-
-    fun getEndDate(): String {
-        val instant = Instant.fromEpochMilliseconds(selectedDates.value.second)
-        val dateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-        val startDate = dateTime.date.toString()
-
-        return startDate
-    }
-
-
-//    private val _amountSum = MutableStateFlow<Double>(0.0)
-//    val amountSum get() = _amountSum.asStateFlow()
 
     companion object {
         private const val STOP_TIMEOUT_LIMIT = 5000L

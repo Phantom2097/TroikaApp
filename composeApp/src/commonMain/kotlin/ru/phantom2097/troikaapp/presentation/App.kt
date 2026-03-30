@@ -8,9 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.scene.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -94,44 +96,37 @@ private fun MainContent(appSettings: AppSettings) {
                 }
             }
         ) { innerPadding ->
+
+            val dialogStrategy = remember { DialogSceneStrategy<NavKey>() }
+
+            val currentEntryProvider = entryProvider<NavKey> {
+                entry<SummaryRoute> {
+                    SummaryScreen(
+                        innerPadding = innerPadding,
+                        datePicker = { navigator.navigate(SelectTargetPeriodRoute) },
+                        navToHistoryScreen = { navigator.navigate(HistoryRoute) },
+                        navigator = navigator
+                    )
+                }
+                entry<HistoryRoute> { HistoryScreen() }
+                entry<SettingsRoute> {
+                    SettingsScreen(appSettings = appSettings, innerPadding = innerPadding)
+                }
+                entry<SubscriptionRoute> { SubscriptionScreen() }
+                entry<SelectTargetPeriodRoute>(
+                    metadata = DialogSceneStrategy.dialog(
+                        DialogProperties()
+                    )
+                ) {
+                    SelectTargetPeriod(onDismissRequest = navigator::goBack)
+                }
+            }
+
             NavDisplay(
                 modifier = Modifier,
                 onBack = navigator::goBack,
-                entries = navigationState.toEntries(
-                    entryProvider {
-                        entry<SummaryRoute> {
-                            SummaryScreen(
-                                innerPadding = innerPadding,
-                                datePicker = {
-                                    navigator.navigate(SelectTargetPeriodRoute)
-                                },
-                                navToHistoryScreen = {
-                                    navigator.navigate(HistoryRoute)
-                                },
-                                navigator = navigator
-                            )
-                        }
-                        entry<HistoryRoute> {
-                            HistoryScreen()
-                        }
-                        entry<SettingsRoute> {
-                            SettingsScreen(
-                                appSettings = appSettings,
-                                innerPadding = innerPadding
-                            )
-                        }
-                        entry<SubscriptionRoute> {
-                            SubscriptionScreen()
-                        }
-                        entry<SelectTargetPeriodRoute> {
-                            SelectTargetPeriod(
-                                onDismissRequest = {
-                                    navigator.goBack()
-                                }
-                            )
-                        }
-                    }
-                ),
+                sceneStrategies = listOf(dialogStrategy),
+                entries = navigationState.toEntries(currentEntryProvider)
             )
         }
     }

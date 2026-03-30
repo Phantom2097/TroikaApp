@@ -1,8 +1,6 @@
 package ru.phantom2097.troikaapp.presentation.summary
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,19 +22,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.vectorResource
-import ru.phantom2097.troikaapp.presentation.core.ui.collapseAndClip
+import ru.phantom2097.troikaapp.presentation.core.ui.AppModifiers.collapseAndClip
+import ru.phantom2097.troikaapp.presentation.summary.select_date.DateChooseItemWithDates
 import ru.phantom2097.troikaapp.presentation.ui.theme.AppTheme
-import ru.phantom2097.troikaapp.resources.Res
-import ru.phantom2097.troikaapp.resources.outline_edit_calendar_24
 
 @Composable
 fun TopScreenItem(
     modifier: Modifier = Modifier,
     scrollProvider: () -> Int,
-    startDate: String,
-    endDate: String,
+    dateRange: DateRangePickerState,
     allSum: String,
     datePickerListener: () -> Unit,
     loadDataListener: () -> Unit,
@@ -65,7 +58,9 @@ fun TopScreenItem(
                     .collapseAndClip {
                         scrollProvider().coerceIn(0, topBlock)
                     }
-                    .onSizeChanged { topBlock = it.height },
+                    .onSizeChanged { size ->
+                        topBlock = size.height
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -84,39 +79,15 @@ fun TopScreenItem(
             }
 
             CurrentWastedSum(allSum)
-            Column(
-                modifier = Modifier
-                    .collapseAndClip {
-                        maxOf(0, scrollProvider() - topBlock).coerceIn(0, bottomBlock)
-                    }
-                    .onSizeChanged { bottomBlock = it.height }
-            ) {
-                Spacer(modifier = Modifier.height(4.dp))
 
-                Column(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .clickable {
-                            datePickerListener()
-                        }
-                        .padding(vertical = 4.dp, horizontal = 8.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        imageVector = vectorResource(Res.drawable.outline_edit_calendar_24),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "$startDate - $endDate",
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            }
+            DateChooseItemWithDates(
+                collapseProvider = {
+                    maxOf(0, scrollProvider() - topBlock).coerceIn(0, bottomBlock)
+                },
+                bottomBlockChange = { bottomBlock = it },
+                datePickerListener,
+                dateRange,
+            )
 
             Spacer(modifier = Modifier.height(4.dp))
         }
@@ -128,11 +99,10 @@ fun TopScreenItem(
 private fun TopScreenItemPreview() {
     AppTheme {
         TopScreenItem(
-            startDate = "19.06.1940",
             scrollProvider = { 0 },
-            endDate = "28.06.1988",
             allSum = "60000",
-            datePickerListener = { }
+            datePickerListener = { },
+            dateRange = DateRangePickerState.DateRange("19.06.25 - 27.12.2037"),
         ) { }
     }
 }

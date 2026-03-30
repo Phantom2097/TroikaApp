@@ -22,8 +22,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.unit.dp
@@ -44,12 +46,15 @@ fun SummaryScreen(
     navigator: Navigator,
     summaryViewModel: SummaryViewModel = koinViewModel<SummaryViewModel>(),
 ) {
+    val hapticFeedback = LocalHapticFeedback.current
     val scrollState = rememberLazyListState()
     val allSum = summaryViewModel.amountSum.collectAsStateWithLifecycle()
+    val dateRange = summaryViewModel.dateRange.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         summaryViewModel.scrollToTop.collect {
-            scrollState.animateScrollToItem(0)
+            scrollState.scrollToItem(0)
+            hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
         }
     }
 
@@ -57,30 +62,47 @@ fun SummaryScreen(
         innerPadding = innerPadding,
         scrollState = scrollState,
         allSum = allSum.value.toString(),
-        startDate = summaryViewModel.getStartDate(),
-        endDate = summaryViewModel.getEndDate(),
+        dateRange = dateRange.value,
         datePicker = { datePicker() },
         navToHistoryScreen = { navToHistoryScreen() },
         navigator = navigator
     )
 }
 
+//private class CollapsingAppBarNestedScrollConnection(
+//    val appBarMaxHeight: Int
+//) : NestedScrollConnection {
+//
+//    var appBarOffset: Int by mutableIntStateOf(0)
+//        private set
+//
+//    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+//        val delta = available.y.toInt()
+//        val newOffset = appBarOffset + delta
+//        val previousOffset = appBarOffset
+//        appBarOffset = newOffset.coerceIn(-appBarMaxHeight, 0)
+//        val consumed = appBarOffset - previousOffset
+//        return Offset(0f, consumed.toFloat())
+//    }
+//}
+
 @Composable
 fun SummaryLayout(
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues,
     scrollState: LazyListState,
+    dateRange: DateRangePickerState,
     allSum: String,
-    startDate: String,
-    endDate: String,
     datePicker: () -> Unit,
     navToHistoryScreen: () -> Unit,
     navigator: Navigator,
 ) {
     val density = LocalDensity.current
 
-    var maxHeaderHeightPx by remember { mutableIntStateOf(0) }
-    val maxHeaderHeightDp = with(density) { maxHeaderHeightPx.toDp() }
+    var headerHeightPx by remember { mutableIntStateOf(0) }
+    val headerHeightDp =
+        with(density) { headerHeightPx.toDp() }
+
 
     val scrollOffsetPx by remember {
         derivedStateOf {
@@ -98,10 +120,11 @@ fun SummaryLayout(
             .background(MaterialTheme.colorScheme.background)
     ) {
         LazyColumn(
-            modifier = Modifier,
+            modifier = Modifier
+                .padding(horizontal = 4.dp),
             state = scrollState,
             contentPadding = PaddingValues(
-                top = innerPadding.calculateTopPadding() + maxHeaderHeightDp,
+                top = innerPadding.calculateTopPadding() + headerHeightDp,
                 bottom = innerPadding.calculateBottomPadding()
             )
         ) {
@@ -157,7 +180,7 @@ fun SummaryLayout(
                 .fillMaxWidth()
                 .padding(top = innerPadding.calculateTopPadding())
                 .onSizeChanged { size ->
-                    if (size.height > maxHeaderHeightPx) maxHeaderHeightPx = size.height
+                    if (size.height > headerHeightPx) headerHeightPx = size.height
                 }
                 .background(
                     brush = Brush.verticalGradient(
@@ -172,8 +195,7 @@ fun SummaryLayout(
             TopScreenItem(
                 modifier = Modifier,
                 scrollProvider = { scrollOffsetPx },
-                startDate = startDate,
-                endDate = endDate,
+                dateRange = dateRange,
                 allSum = allSum,
                 datePickerListener = { datePicker() }
             ) { navToHistoryScreen() }
@@ -189,8 +211,7 @@ private fun SummaryScreenPreview() {
         SummaryLayout(
             innerPadding = PaddingValues(),
             allSum = "34234",
-            startDate = "16.23.3444",
-            endDate = "27.43.2333",
+            dateRange = DateRangePickerState.DateRange("19.06.25 - 27.12.2037"),
             scrollState = rememberLazyListState(),
             datePicker = {},
             navToHistoryScreen = {},

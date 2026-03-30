@@ -1,5 +1,7 @@
 package ru.phantom2097.troikaapp.presentation.summary
 
+import androidx.compose.runtime.Stable
+
 sealed class SummaryUiState {
 
     data object Loading : SummaryUiState()
@@ -9,4 +11,10 @@ sealed class SummaryUiState {
         val startDate: String = "",
         val endDate: String = "",
     ) : SummaryUiState()
+}
+
+@Stable
+sealed interface DateRangePickerState {
+    data object Loading : DateRangePickerState
+    data class DateRange(val dateRange: String) : DateRangePickerState
 }

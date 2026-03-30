@@ -1,5 +1,6 @@
 package ru.phantom2097.troikaapp.data.repository
 
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -47,5 +48,11 @@ class MetroRepositoryImpl(
 
     override suspend fun updateStationInfo() {
         TODO("Not yet implemented")
+    }
+
+    private companion object {
+        val DATE_RANGE_FIRST_DATE_KEY = stringPreferencesKey("date_range_first_date_key_v1")
+        val DATE_RANGE_START_KEY = stringPreferencesKey("date_range_start_key_v1")
+        val DATE_RANGE_END_KEY = stringPreferencesKey("date_range_end_key_v1")
     }
 }
