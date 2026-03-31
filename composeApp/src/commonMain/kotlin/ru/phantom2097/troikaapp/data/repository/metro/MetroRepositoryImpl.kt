@@ -1,13 +1,12 @@
-package ru.phantom2097.troikaapp.data.repository
+package ru.phantom2097.troikaapp.data.repository.metro
 
-import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import ru.phantom2097.troikaapp.data.database.MetroDatabase
 import ru.phantom2097.troikaapp.data.mappers.TripMapper.toTripInfo
-import ru.phantom2097.troikaapp.domain.entities.TripInfo
+import ru.phantom2097.troikaapp.domain.entities.metro.TripInfo
 import ru.phantom2097.troikaapp.domain.repository.MetroRepository
 
 class MetroRepositoryImpl(
@@ -48,11 +47,5 @@ class MetroRepositoryImpl(
 
     override suspend fun updateStationInfo() {
         TODO("Not yet implemented")
-    }
-
-    private companion object {
-        val DATE_RANGE_FIRST_DATE_KEY = stringPreferencesKey("date_range_first_date_key_v1")
-        val DATE_RANGE_START_KEY = stringPreferencesKey("date_range_start_key_v1")
-        val DATE_RANGE_END_KEY = stringPreferencesKey("date_range_end_key_v1")
     }
 }

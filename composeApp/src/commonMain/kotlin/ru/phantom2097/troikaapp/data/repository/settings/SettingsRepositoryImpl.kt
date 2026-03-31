@@ -1,4 +1,4 @@
-package ru.phantom2097.troikaapp.data.settings
+package ru.phantom2097.troikaapp.data.repository.settings
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -53,5 +53,12 @@ class SettingsRepositoryImpl(
         val THEME = stringPreferencesKey("app_theme_key_v1")
         val LANGUAGE = stringPreferencesKey("app_language_key_v1")
         val NOTIFICATIONS = booleanPreferencesKey("notifications_key_v1")
+
+        val FORMATTED_DATES_TYPE = stringPreferencesKey("formatted_dates_type_key_v1")
+        val DATE_SEPARATOR_TYPE = stringPreferencesKey("date_separator_type_key_v1")
+
+        val DATE_RANGE_FIRST_DATE_KEY = stringPreferencesKey("date_range_first_date_key_v1")
+        val DATE_RANGE_START_KEY = stringPreferencesKey("date_range_start_key_v1")
+        val DATE_RANGE_END_KEY = stringPreferencesKey("date_range_end_key_v1")
     }
 }

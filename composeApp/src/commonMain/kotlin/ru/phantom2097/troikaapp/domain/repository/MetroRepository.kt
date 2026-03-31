@@ -1,7 +1,7 @@
 package ru.phantom2097.troikaapp.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import ru.phantom2097.troikaapp.domain.entities.TripInfo
+import ru.phantom2097.troikaapp.domain.entities.metro.TripInfo
 
 interface MetroRepository {
 

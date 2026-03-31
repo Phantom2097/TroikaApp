@@ -1,4 +1,4 @@
-package ru.phantom2097.troikaapp.domain.entities
+package ru.phantom2097.troikaapp.domain.entities.metro
 
 import kotlin.time.Instant
 

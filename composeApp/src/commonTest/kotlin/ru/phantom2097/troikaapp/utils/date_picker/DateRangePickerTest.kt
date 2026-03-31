@@ -1,13 +1,20 @@
 package ru.phantom2097.troikaapp.utils.date_picker
 
 import kotlinx.datetime.TimeZone
-import ru.phantom2097.troikaapp.presentation.utils.date.FormattedDatesType
+import ru.phantom2097.troikaapp.domain.entities.date_period.DateSeparatorType
+import ru.phantom2097.troikaapp.domain.entities.date_period.FormattedDateType
 import ru.phantom2097.troikaapp.presentation.utils.date.toFormattedDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class DateRangePickerTest {
+
+    private companion object {
+        private const val DATE_FOR_TESTS = 1_774_828_800_000L
+    }
+
     private val timeZone = TimeZone.UTC
+
     @Test
     fun `get date from epoch`() {
         val date = DATE_FOR_TESTS.toFormattedDate(timeZone)
@@ -17,28 +24,36 @@ class DateRangePickerTest {
 
     @Test
     fun `actual date have format dmy`() {
-        val date = DATE_FOR_TESTS.toFormattedDate(timeZone, FormattedDatesType.DMY)
+        val date = DATE_FOR_TESTS.toFormattedDate(timeZone, FormattedDateType.DMY)
 
         assertEquals("30.03.2026", date)
     }
 
     @Test
     fun `actual date have format ymd`() {
-        val date = DATE_FOR_TESTS.toFormattedDate(timeZone, FormattedDatesType.YMD)
+        val date = DATE_FOR_TESTS.toFormattedDate(timeZone, FormattedDateType.YMD)
 
         assertEquals("2026.03.30", date)
     }
 
     @Test
     fun `actual date have format mdy`() {
-        val date = DATE_FOR_TESTS.toFormattedDate(timeZone, FormattedDatesType.MDY)
+        val date = DATE_FOR_TESTS.toFormattedDate(timeZone, FormattedDateType.MDY)
 
         assertEquals("03.30.2026", date)
     }
 
-    private companion object {
-        private const val DATE_FOR_TESTS = 1_774_828_800_000L
+    @Test
+    fun `apply dot separator`() {
+        val date = DATE_FOR_TESTS.toFormattedDate(timeZone, separatorType = DateSeparatorType.DOT)
+
+        assertEquals("30.03.2026", date)
+    }
+
+    @Test
+    fun `apply slash separator`() {
+        val date = DATE_FOR_TESTS.toFormattedDate(timeZone, separatorType = DateSeparatorType.SLASH)
+
+        assertEquals("30/03/2026", date)
     }
 }
-
-// TODO: add separator enum and tests for them

@@ -7,17 +7,22 @@ import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toLocalDateTime
-import ru.phantom2097.troikaapp.presentation.utils.date.FormattedDatesType.Companion.applySeparator
+import ru.phantom2097.troikaapp.domain.entities.date_period.DateSeparatorType
+import ru.phantom2097.troikaapp.domain.entities.date_period.FormattedDateType
+import ru.phantom2097.troikaapp.domain.entities.date_period.FormattedDateType.Companion.applySeparator
 import kotlin.time.Instant
 
-// TODO: Хранить в дата стор и передавать через репозиторий настроек
-internal fun Long.toFormattedDate(timeZone: TimeZone, formattedDatesType: FormattedDatesType = FormattedDatesType.DMY): String {
+internal fun Long.toFormattedDate(
+    timeZone: TimeZone,
+    formattedDateType: FormattedDateType = FormattedDateType.DMY, // use DateFormatSettings
+    separatorType: DateSeparatorType = DateSeparatorType.DOT
+): String {
 
     val date = Instant.fromEpochMilliseconds(this)
         .toLocalDateTime(timeZone)
         .date
 
-    val typeWithSeparator = formattedDatesType.applySeparator()
+    val typeWithSeparator = formattedDateType.applySeparator(type = separatorType)
 
     val format = dateFormatterFromPattern(typeWithSeparator)
 
